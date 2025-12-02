@@ -1,0 +1,46 @@
+service: express-lambda-ts-dev
+framework: express-lambda-ts
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: us-east-1
+  environment:
+    STUDENTS_TABLE: StudentsTable
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:Scan"
+            - "dynamodb:GetItem"
+            - "dynamodb:PutItem"
+            - "dynamodb:UpdateItem"
+            - "dynamodb:DeleteItem"
+          Resource: "arn:aws:dynamodb:us-east-1:*:table/StudentsTable"
+
+functions:
+  main:
+    handler: dist/lambda.handler
+    events:
+      - http:
+          path: '{proxy+}'   # catch all routes
+          method: ANY
+
+resources:
+  Resources:
+    StudentsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: StudentsTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+  # Removed Outputs block to avoid unresolved dependency
+  # (Endpoint URL shows in deploy logs anyway)

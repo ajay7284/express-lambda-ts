@@ -1,0 +1,51 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Build output
+dist/
+build/
+.out/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Serverless
+.serverless/
+.webpack/
+
+# TypeScript
+*.tsbuildinfo
+
+# AWS SAM / CDK / Terraform
+.aws-sam/
+cdk.out/
+.terraform/
+terraform.tfstate
+terraform.tfstate.*
+
+# VS Code
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
