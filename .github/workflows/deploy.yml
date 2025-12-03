@@ -10,34 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4   # updated to v4
 
-      # Step 2: Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '20'        # Node 18 is EOL – use 20 or 18 if you must
+          cache: 'npm'
 
-      # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci                   # faster + more reliable than npm install
 
-      # Step 4: Build project
-      - name: Build project
+      - name: Build project (if you have a build step)
         run: npm run build
+        if: ${{ steps.build.outputs.cache-hit != 'true' }}   # only if needed
 
-      # Step 5: Install Serverless CLI
-      - name: Install Serverless
-        run: npm install -g serverless
-
-      # Step 6: Configure AWS credentials
-      - name: Setup AWS credentials
-        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      # Step 7: Deploy using Serverless
-      - name: Deploy Serverless App
+      # Serverless Framework v4+ – NO login needed if you pass the license key
+      - name: Deploy with Serverless Framework
+        run: npx serverless deploy --verbose
         env:
+          # This is the ONLY thing you need for v4+ in CI
           SERVERLESS_LICENSE_KEY: ${{ secrets.SERVERLESS_LICENSE_KEY }}
-        run: sls deploy --verbose
+
+          # Your AWS credentials (keep using your existing secrets)
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
