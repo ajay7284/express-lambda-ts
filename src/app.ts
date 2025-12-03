@@ -6,6 +6,7 @@ import studentsRouter from "./routes/students.route";
 const app = express();
 
 // Middlewares
+app.disable("etag");
 app.use(cors());
 app.use(express.json());
 
