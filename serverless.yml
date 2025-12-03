@@ -1,5 +1,4 @@
 service: express-lambda-ts-dev
-framework: express-lambda-ts
 frameworkVersion: '4'
 
 provider:
@@ -19,6 +18,8 @@ provider:
             - "dynamodb:UpdateItem"
             - "dynamodb:DeleteItem"
           Resource: "arn:aws:dynamodb:us-east-1:*:table/StudentsTable"
+  deploymentBucket:
+    name: my-serverless-bucket
 
 functions:
   main:
