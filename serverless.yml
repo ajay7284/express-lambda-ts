@@ -19,6 +19,10 @@ provider:
             - "dynamodb:UpdateItem"
             - "dynamodb:DeleteItem"
           Resource: "arn:aws:dynamodb:us-east-1:*:table/StudentsTable"
+  deploymentBucket:
+    name: my-company-serverless-deployments-us-east-1
+    serverSideEncryption: AES256
+    blockPublicAccess: true
 
 functions:
   main:
